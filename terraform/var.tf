@@ -5,7 +5,7 @@ variable executable { default = "cbpro-buy-lambda" }
 variable archive { default = "cbpro-buy-lambda.zip" }
 # set to 1 or null
 variable auto_deposit { default = 1 }
-variable amount { default = 10 }
+variable amount { default = 50 }
 variable currency { default = "USD" }
 variable product { default = "BTC" }
 variable cbpro_key {
