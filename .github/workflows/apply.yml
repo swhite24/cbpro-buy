@@ -1,4 +1,4 @@
-name: Apply (NonProd)
+name: Apply
 on:
   push:
     branches:
