@@ -46,4 +46,6 @@ dashboard/vendor/
 
 bin/cbpro-buy
 cbpro-buy.zip
+bin/cbpro-buy-lambda
+cbpro-buy-lambda.zip
 .env

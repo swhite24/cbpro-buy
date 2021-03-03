@@ -1,5 +1,6 @@
 BIN = $(CURDIR)/bin
 BINARY=cbpro-buy
+LAMBDA=cbpro-buy-lambda
 VERSION=0.1.0
 
 $(BIN):
@@ -9,6 +10,9 @@ default: install
 
 build: | $(BIN)
 	go build -o $(BIN)/${BINARY} ./cmd/${BINARY}
+
+build-lambda: | $(BIN)
+	go build -o $(BIN)/${LAMBDA} ./cmd/${LAMBDA}
 
 release:
 	GOOS=darwin GOARCH=amd64 go build -o ./bin/${BINARY}_${VERSION}_darwin_amd64

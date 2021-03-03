@@ -67,19 +67,19 @@ resource aws_iam_role_policy_attachment lambda_logs {
   policy_arn = aws_iam_policy.lambda_logging.arn
 }
 
-resource aws_cloudwatch_event_rule event_rule {
-  schedule_expression = var.lambda_schedule_expression
-}
+# resource aws_cloudwatch_event_rule event_rule {
+#   schedule_expression = var.lambda_schedule_expression
+# }
 
-resource aws_cloudwatch_event_target event_target {
-  rule = aws_cloudwatch_event_rule.event_rule.name
-  arn  = aws_lambda_function.cbpro_buy.arn
-}
+# resource aws_cloudwatch_event_target event_target {
+#   rule = aws_cloudwatch_event_rule.event_rule.name
+#   arn  = aws_lambda_function.cbpro_buy.arn
+# }
 
-resource aws_lambda_permission cloudwatch_permission {
-  statement_id  = "AllowExecutionFromCloudWatch"
-  action        = "lambda:InvokeFunction"
-  function_name = var.function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.event_rule.arn
-}
+# resource aws_lambda_permission cloudwatch_permission {
+#   statement_id  = "AllowExecutionFromCloudWatch"
+#   action        = "lambda:InvokeFunction"
+#   function_name = var.function_name
+#   principal     = "events.amazonaws.com"
+#   source_arn    = aws_cloudwatch_event_rule.event_rule.arn
+# }
