@@ -14,7 +14,7 @@ env:
 jobs:
   terraform_apply:
     name: Terraform Apply
-    runs-on: [self-hosted, tsa]
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./terraform/nonprod
