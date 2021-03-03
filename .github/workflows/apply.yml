@@ -3,10 +3,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "terraform/nonprod/**"
-      - "terraform/modules/**"
-      - "!terraform/nonprod/applications/**"
 env:
   TF_IN_AUTOMATION: "true"
   TERRAFORM_VERSION: 0.14.7
