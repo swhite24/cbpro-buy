@@ -1,0 +1,49 @@
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Kubernetes Generated files - skip generated files, except for vendored files
+
+!vendor/**/zz_generated.*
+
+# editor and IDE paraphernalia
+.idea
+*.swp
+*.swo
+*~
+*.key
+
+mock_*.go
+vendor/.bin/
+*.plan
+*.auto.tfvars
+*tfstate*
+.terraform
+tmp
+mocks
+pkg/**/.aqua.yml
+helm/*/*.tgz
+
+# kubernetes
+**/.kube/config
+
+# dashboard
+dashboard/vendor/
+
+# vscode
+.vscode/local-settings.json
+
+bin/cbpro-buy
+cbpro-buy.zip
+.env
