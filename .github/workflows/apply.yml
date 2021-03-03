@@ -4,6 +4,7 @@ on:
     branches:
       - master
 env:
+  terraform_dir: "./terraform"
   TF_IN_AUTOMATION: "true"
   TERRAFORM_VERSION: 0.14.7
   AWS_REGION: us-east-1
@@ -33,8 +34,11 @@ jobs:
             -backend-config=secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             -backend-config=bucket=${{ secrets.STATE_BUCKET }} \
             -backend-config=key=${{ secrets.STATE_KEY }}
+        working-directory: ${{ env.terraform_dir }}
       - name: Terraform plan
         run: |
           terraform plan -input=false -out=tfplan
+        working-directory: ${{ env.terraform_dir }}
       - name: Terraform apply
         run: terraform apply -input=false tfplan
+        working-directory: ${{ env.terraform_dir }}
