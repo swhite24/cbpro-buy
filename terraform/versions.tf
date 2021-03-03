@@ -5,9 +5,9 @@ terraform {
       version = "~> 3.30.0"
     }
     archive = {
-      souce   = "hashicorp/archive"
+      source  = "hashicorp/archive"
       version = "~> 2.1.0"
     }
   }
-  required_version = "~> 0.13.6"
+  required_version = "~> 0.14.7"
 }

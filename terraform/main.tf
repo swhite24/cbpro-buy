@@ -34,7 +34,13 @@ resource aws_lambda_function cbpro_buy {
 
   environment {
     variables = {
-      foo = "bar"
+      CBPRO_BUY_KEY         = var.cbpro_key
+      CBPRO_BUY_PASSPHRASE  = var.cbpro_passphrase
+      CBPRO_BUY_SECRET      = var.cbpro_secret
+      CBPRO_BUY_CURRENCY    = var.currency
+      CBPRO_BUY_PRODUCT     = var.product
+      CBPRO_BUY_AMOUNT      = var.amount
+      CBPRO_BUY_AUTODEPOSIT = var.auto_deposit
     }
   }
 }
@@ -67,19 +73,19 @@ resource aws_iam_role_policy_attachment lambda_logs {
   policy_arn = aws_iam_policy.lambda_logging.arn
 }
 
-# resource aws_cloudwatch_event_rule event_rule {
-#   schedule_expression = var.lambda_schedule_expression
-# }
+resource aws_cloudwatch_event_rule event_rule {
+  schedule_expression = var.lambda_schedule_expression
+}
 
-# resource aws_cloudwatch_event_target event_target {
-#   rule = aws_cloudwatch_event_rule.event_rule.name
-#   arn  = aws_lambda_function.cbpro_buy.arn
-# }
+resource aws_cloudwatch_event_target event_target {
+  rule = aws_cloudwatch_event_rule.event_rule.name
+  arn  = aws_lambda_function.cbpro_buy.arn
+}
 
-# resource aws_lambda_permission cloudwatch_permission {
-#   statement_id  = "AllowExecutionFromCloudWatch"
-#   action        = "lambda:InvokeFunction"
-#   function_name = var.function_name
-#   principal     = "events.amazonaws.com"
-#   source_arn    = aws_cloudwatch_event_rule.event_rule.arn
-# }
+resource aws_lambda_permission cloudwatch_permission {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = var.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.event_rule.arn
+}
