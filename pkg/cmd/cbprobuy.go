@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/swhite24/dca-bot/pkg/config"
-	"github.com/swhite24/dca-bot/pkg/purchase"
+	"github.com/swhite24/cbpro-buy/pkg/config"
+	"github.com/swhite24/cbpro-buy/pkg/purchase"
 )
 
 var (

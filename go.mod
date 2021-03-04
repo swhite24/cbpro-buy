@@ -1,4 +1,4 @@
-module github.com/swhite24/dca-bot
+module github.com/swhite24/cbpro-buy
 
 go 1.14
 

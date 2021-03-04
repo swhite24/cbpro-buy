@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/swhite24/dca-bot/pkg/cmd"
+	"github.com/swhite24/cbpro-buy/pkg/cmd"
 )
 
 func main() {

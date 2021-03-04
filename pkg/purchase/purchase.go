@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/preichenberger/go-coinbasepro/v2"
-	"github.com/swhite24/dca-bot/pkg/config"
+	"github.com/swhite24/cbpro-buy/pkg/config"
 )
 
 var (

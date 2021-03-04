@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/swhite24/dca-bot/pkg/cmd"
+	"github.com/swhite24/cbpro-buy/pkg/cmd"
 )
 
 // Handle is the handler for lambda
