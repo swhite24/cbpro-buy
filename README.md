@@ -4,6 +4,7 @@
 
 ## Prerequisites
 
+- Verified Coinbase Pro account with instant deposits
 - Obtain an API Key  
   https://docs.pro.coinbase.com/#authentication
 
