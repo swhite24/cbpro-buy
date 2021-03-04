@@ -13,6 +13,12 @@
 go get github.com/swhite24/cbpro-buy/cmd/cbpro-buy
 ```
 
+## Features
+
+- Purchase any product on Coinbase Pro in any currency pair (that's available to your locale / account).
+- Automatically deposit funds to conduct the purchase if your USD / other currency account is unable to fulfill.
+- Automatically wait for deposit to clear before attempting to issue a market buy.
+
 ## Usage
 
 ```sh
@@ -32,6 +38,15 @@ Flags:
       --product string      Product to purchase from coinbase pro (BTC, ETH, etc.) (default "BTC")
       --sandbox             Whether to use coinbase pro sandbox environment (will require different api key
       --secret string       Coinbase Pro API key secret
+```
+
+## Lambda Usage
+
+This repo also contains an example deployment using [AWS Lambda](https://aws.amazon.com/lambda/) executed on a schedule to provide a means to "dollar cost average" with scheduled buys regardless of price. This is handled with [terraform](https://www.terraform.io/). See [the terraform directory](terraform) for details.
+
+```sh
+terraform init
+terraform apply
 ```
 
 ## License
