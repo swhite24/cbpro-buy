@@ -1,6 +1,6 @@
 variable region { default = "us-east-1" }
 variable function_name { default = "cbpro-buy-weekly" }
-variable lambda_schedule_expression { default = "cron(0 5 ? * 5 *)" }
+variable lambda_schedule_expression { default = "cron(0 5 * * ? *)" }
 variable executable { default = "cbpro-buy-lambda" }
 variable archive { default = "cbpro-buy-lambda.zip" }
 # set to 1 or null
