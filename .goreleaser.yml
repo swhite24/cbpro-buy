@@ -1,0 +1,32 @@
+before:
+  hooks:
+    - go mod download
+builds:
+  - dir: cmd/cbpro-buy
+    binary: "{{ .ProjectName }}_{{ .Tag }}"
+    flags:
+      - -trimpath
+    env:
+      - CGO_ENABLED=0
+    goarch:
+      - "386"
+      - amd64
+      - arm
+      - arm64
+    goos:
+      - linux
+      - windows
+      - darwin
+    ignore:
+      - goarch: "386"
+        goos: darwin
+    mod_timestamp: "{{ .CommitTimestamp }}"
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Tag }}_SHA256SUMS"
+  algorithm: sha256
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
