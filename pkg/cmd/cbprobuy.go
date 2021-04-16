@@ -35,11 +35,10 @@ func init() {
 		Run: func(cmd *cobra.Command, args []string) {
 			cfg := config.InitializeConfig(cmd.Flags())
 			client := initializeClient(cfg)
-			fmt.Println(cfg)
 
 			// Determine basis if configured
 			if cfg.UseBasis {
-				fmt.Printf("use-basis configured; getting average purchase price over last %f days.\n", cfg.BasisWindowStart)
+				fmt.Printf("Use basis configured. Getting average purchase price over last %.0f days.\n", cfg.BasisWindowStart)
 				// Calculate average cost
 				c := &basisconfig.Config{
 					Key:        cfg.Key,
@@ -72,6 +71,8 @@ func init() {
 					fmt.Println("Current price less than average price.")
 					fmt.Printf("Adjusting buy amount from %.2f to %.2f\n", cfg.Amount, cfg.Amount*cfg.BasisMultiplier)
 					cfg.Amount = cfg.Amount * cfg.BasisMultiplier
+				} else {
+					fmt.Println("Current price greater than average price. Not adjusting buy amount.")
 				}
 			}
 
