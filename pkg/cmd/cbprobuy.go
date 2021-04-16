@@ -3,11 +3,17 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/preichenberger/go-coinbasepro/v2"
 	"github.com/spf13/cobra"
+	"github.com/swhite24/cbpro-buy/pkg/book"
 	"github.com/swhite24/cbpro-buy/pkg/config"
 	"github.com/swhite24/cbpro-buy/pkg/purchase"
+
+	basisconfig "github.com/swhite24/cbpro-cost-basis/pkg/config"
+	"github.com/swhite24/cbpro-cost-basis/pkg/costbasis"
 )
 
 var (
@@ -29,6 +35,42 @@ func init() {
 		Run: func(cmd *cobra.Command, args []string) {
 			cfg := config.InitializeConfig(cmd.Flags())
 			client := initializeClient(cfg)
+			fmt.Println(cfg)
+
+			// Determine basis if configured
+			if cfg.UseBasis {
+				// Calculate average cost
+				c := &basisconfig.Config{
+					Key:        cfg.Key,
+					Passphrase: cfg.Passphrase,
+					Secret:     cfg.Secret,
+					Product:    fmt.Sprintf("%s-%s", cfg.Product, cfg.Currency),
+					StartDate:  time.Now().Add(time.Duration(cfg.BasisWindowStart*-24) * time.Hour),
+					EndDate:    time.Now(),
+				}
+				info, err := costbasis.Calculate(client, c)
+				if err != nil {
+					fmt.Println("failed to calculate basis")
+					fmt.Println(err)
+					os.Exit(1)
+				}
+				fmt.Println(c, info, err)
+
+				// Get current price
+				average, _ := strconv.ParseFloat(info.AverageCost, 64)
+				price, err := book.GetPrice(client, fmt.Sprintf("%s-%s", cfg.Product, cfg.Currency))
+				if err != nil {
+					fmt.Println("failed to calculate current price")
+					fmt.Println(err)
+					os.Exit(1)
+				}
+
+				// Update purchase amount if current price is less than average cost
+				if price < average {
+					cfg.Amount = cfg.Amount * cfg.BasisMultiplier
+				}
+			}
+
 			err := purchase.InitiatePurchase(client, cfg)
 			if err != nil {
 				fmt.Println("failed to purchase")
