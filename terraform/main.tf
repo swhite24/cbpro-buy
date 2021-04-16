@@ -35,14 +35,15 @@ resource "aws_lambda_function" "cbpro_buy" {
 
   environment {
     variables = {
-      CBPRO_BUY_KEY         = var.cbpro_key
-      CBPRO_BUY_PASSPHRASE  = var.cbpro_passphrase
-      CBPRO_BUY_SECRET      = var.cbpro_secret
-      CBPRO_BUY_CURRENCY    = var.currency
-      CBPRO_BUY_PRODUCT     = var.product
-      CBPRO_BUY_AMOUNT      = var.amount
-      CBPRO_BUY_AUTODEPOSIT = var.auto_deposit
-      CBPRO_BUY_USE_BASIS   = var.use_basis
+      CBPRO_BUY_KEY                = var.cbpro_key
+      CBPRO_BUY_PASSPHRASE         = var.cbpro_passphrase
+      CBPRO_BUY_SECRET             = var.cbpro_secret
+      CBPRO_BUY_CURRENCY           = var.currency
+      CBPRO_BUY_PRODUCT            = var.product
+      CBPRO_BUY_AMOUNT             = var.amount
+      CBPRO_BUY_AUTODEPOSIT        = var.auto_deposit
+      CBPRO_BUY_USE_BASIS          = var.use_basis
+      CBPRO_BUY_BASIS_WINDOW_START = var.basis_window_start
     }
   }
 }
