@@ -39,6 +39,7 @@ func init() {
 
 			// Determine basis if configured
 			if cfg.UseBasis {
+				fmt.Printf("use-basis configured; getting average purchase price over last %f days.\n", cfg.BasisWindowStart)
 				// Calculate average cost
 				c := &basisconfig.Config{
 					Key:        cfg.Key,
@@ -54,7 +55,7 @@ func init() {
 					fmt.Println(err)
 					os.Exit(1)
 				}
-				fmt.Println(c, info, err)
+				fmt.Printf("Average purchase price: %s\n", info.AverageCost)
 
 				// Get current price
 				average, _ := strconv.ParseFloat(info.AverageCost, 64)
@@ -64,9 +65,12 @@ func init() {
 					fmt.Println(err)
 					os.Exit(1)
 				}
+				fmt.Printf("Current book price: %.2f\n", price)
 
 				// Update purchase amount if current price is less than average cost
 				if price < average {
+					fmt.Println("Current price less than average price.")
+					fmt.Printf("Adjusting buy amount from %.2f to %.2f\n", cfg.Amount, cfg.Amount*cfg.BasisMultiplier)
 					cfg.Amount = cfg.Amount * cfg.BasisMultiplier
 				}
 			}
