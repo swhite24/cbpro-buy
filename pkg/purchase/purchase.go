@@ -10,27 +10,27 @@ import (
 	"github.com/swhite24/cbpro-buy/pkg/config"
 )
 
-var (
-	client *coinbasepro.Client
+type (
+	purchaser struct {
+		cfg    *config.Config
+		client *coinbasepro.Client
+	}
 )
 
 // InitiatePurchase conducts the necessary operations to deposit funds and purchase crypto
-func InitiatePurchase(cfg *config.Config) error {
+func InitiatePurchase(client *coinbasepro.Client, cfg *config.Config) error {
+	p := &purchaser{cfg, client}
+	return p.initiatePurchase()
+}
+
+func (p *purchaser) initiatePurchase() error {
 	var err error
 	var fundingAccount *coinbasepro.Account
 	var initialBalance float64
 
-	client = coinbasepro.NewClient()
-	client.UpdateConfig(&coinbasepro.ClientConfig{
-		BaseURL:    cfg.BaseURL,
-		Key:        cfg.Key,
-		Passphrase: cfg.Passphrase,
-		Secret:     cfg.Secret,
-	})
-
 	// Gather details on current account balance to know if funds are available
 	fmt.Println("Fetching current funding account status.")
-	if fundingAccount, err = getAccount(cfg.Currency); err != nil {
+	if fundingAccount, err = p.getAccount(p.cfg.Currency); err != nil {
 		return err
 	}
 	if initialBalance, err = strconv.ParseFloat(fundingAccount.Balance, 64); err != nil {
@@ -40,14 +40,14 @@ func InitiatePurchase(cfg *config.Config) error {
 	fmt.Printf("Success.  Available balance: %f\n", initialBalance)
 
 	// Check if current balance is sufficient
-	if initialBalance < cfg.Amount {
-		fmt.Printf("Available balance is less than requested purchase: %f\n", cfg.Amount)
-		if !cfg.AutoDeposit {
-			return errors.New("Insufficient funds for purchase")
+	if initialBalance < p.cfg.Amount {
+		fmt.Printf("Available balance is less than requested purchase: %f\n", p.cfg.Amount)
+		if !p.cfg.AutoDeposit {
+			return errors.New("insufficient funds for purchase")
 		}
 		// initiate and wait for deposit
-		fmt.Printf("Initiating deposit of %f %s\n", cfg.Amount, cfg.Currency)
-		if err = deposit(cfg.Currency, cfg.Amount, cfg.UseCoinbase); err != nil {
+		fmt.Printf("Initiating deposit of %f %s\n", p.cfg.Amount, p.cfg.Currency)
+		if err = p.deposit(p.cfg.Currency, p.cfg.Amount, p.cfg.UseCoinbase); err != nil {
 			return err
 		}
 
@@ -56,7 +56,7 @@ func InitiatePurchase(cfg *config.Config) error {
 
 		go func(ch chan int, cfg *config.Config) {
 			for {
-				account, err := getAccount(cfg.Currency)
+				account, err := p.getAccount(cfg.Currency)
 				if err != nil {
 					continue
 				}
@@ -73,7 +73,7 @@ func InitiatePurchase(cfg *config.Config) error {
 				}
 				time.Sleep(3 * time.Second)
 			}
-		}(ready, cfg)
+		}(ready, p.cfg)
 
 		fmt.Println("Waiting for deposit to be available in account.")
 		select {
@@ -85,14 +85,14 @@ func InitiatePurchase(cfg *config.Config) error {
 	}
 
 	// Make purchase
-	fmt.Printf("Initiating purchase of %f %s worth of %s\n", cfg.Amount, cfg.Currency, cfg.Product)
-	return purchase(cfg.Product, cfg.Currency, cfg.Amount)
+	fmt.Printf("Initiating purchase of %f %s worth of %s\n", p.cfg.Amount, p.cfg.Currency, p.cfg.Product)
+	return p.purchase(p.cfg.Product, p.cfg.Currency, p.cfg.Amount)
 }
 
-func getAccount(typ string) (*coinbasepro.Account, error) {
+func (p *purchaser) getAccount(typ string) (*coinbasepro.Account, error) {
 	var err error
 	var accounts []coinbasepro.Account
-	accounts, err = client.GetAccounts()
+	accounts, err = p.client.GetAccounts()
 	if err != nil {
 		return nil, err
 	}
@@ -103,11 +103,11 @@ func getAccount(typ string) (*coinbasepro.Account, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("Unable to find %s account", typ)
+	return nil, fmt.Errorf("unable to find %s account", typ)
 }
 
-func purchase(product, currency string, amount float64) error {
-	_, err := client.CreateOrder(&coinbasepro.Order{
+func (p *purchaser) purchase(product, currency string, amount float64) error {
+	_, err := p.client.CreateOrder(&coinbasepro.Order{
 		Side:      "buy",
 		Type:      "market",
 		ProductID: fmt.Sprintf("%s-%s", product, currency),
@@ -116,18 +116,18 @@ func purchase(product, currency string, amount float64) error {
 	return err
 }
 
-func deposit(currency string, amount float64, coinbase bool) error {
+func (p *purchaser) deposit(currency string, amount float64, coinbase bool) error {
 	if coinbase {
 		// TODO
 		return errors.New("coinbase deposit not yet implemented")
 	}
 
-	pm, err := getPaymentMethod(currency)
+	pm, err := p.getPaymentMethod(currency)
 	if err != nil {
 		return err
 	}
 
-	_, err = client.CreateDeposit(&coinbasepro.Deposit{
+	_, err = p.client.CreateDeposit(&coinbasepro.Deposit{
 		Currency:        "USD",
 		Amount:          fmt.Sprintf("%.2f", amount),
 		PaymentMethodID: pm.ID,
@@ -135,9 +135,9 @@ func deposit(currency string, amount float64, coinbase bool) error {
 	return err
 }
 
-func getPaymentMethod(currency string) (*coinbasepro.PaymentMethod, error) {
+func (p *purchaser) getPaymentMethod(currency string) (*coinbasepro.PaymentMethod, error) {
 	var pm coinbasepro.PaymentMethod
-	pms, err := client.GetPaymentMethods()
+	pms, err := p.client.GetPaymentMethods()
 	if err != nil {
 		return nil, err
 	}
