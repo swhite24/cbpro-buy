@@ -9,6 +9,7 @@ variable "amount" { default = 50 }
 variable "currency" { default = "USD" }
 variable "product" { default = "BTC" }
 variable "use_basis" { default = true }
+variable "basis_window_start" { default = 60 }
 variable "cbpro_key" {
   type      = string
   sensitive = true
