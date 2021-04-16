@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/preichenberger/go-coinbasepro/v2"
 	"github.com/spf13/cobra"
 	"github.com/swhite24/cbpro-buy/pkg/config"
 	"github.com/swhite24/cbpro-buy/pkg/purchase"
@@ -25,7 +26,7 @@ func init() {
 		Short: "cbpro-buy purchases crypto from coinbase pro with auto deposit",
 		Run: func(cmd *cobra.Command, args []string) {
 			cfg := config.InitializeConfig(cmd.Flags())
-			err := purchase.InitiatePurchase(cfg)
+			err := purchase.InitiatePurchase(initializeClient(cfg), cfg)
 			if err != nil {
 				fmt.Println("failed to purchase")
 				fmt.Println(err)
@@ -46,4 +47,15 @@ func init() {
 	CBProBuyCmd.Flags().BoolVar(&useSandbox, "sandbox", false, "Whether to use coinbase pro sandbox environment (will require different api key")
 	CBProBuyCmd.Flags().BoolVar(&autoDeposit, "autodeposit", false, "Whether to auto deposit funds if current account is less than amount")
 	CBProBuyCmd.Flags().Float64Var(&amount, "amount", 50, "Amount of product to purchase")
+}
+
+func initializeClient(cfg *config.Config) *coinbasepro.Client {
+	client := coinbasepro.NewClient()
+	client.UpdateConfig(&coinbasepro.ClientConfig{
+		BaseURL:    cfg.BaseURL,
+		Key:        cfg.Key,
+		Passphrase: cfg.Passphrase,
+		Secret:     cfg.Secret,
+	})
+	return client
 }
