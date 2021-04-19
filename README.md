@@ -45,6 +45,29 @@ Flags:
       --use-basis                  Whether to adjust purchase amount if current price is below average cost over time window
 ```
 
+## Example
+
+```sh
+$ export CBPRO_BUY_SECRET="..."
+$ export CBPRO_BUY_KEY="..."
+$ export CBPRO_BUY_PASSPHRASE="..."
+$ cbpro-buy --amount 10 --autodeposit --use-basis
+Use basis configured. Getting average purchase price over last 30 days.
+Average purchase price: 56580.94
+Current book price: 54953.52
+Current price less than average price.
+Adjusting buy amount from 10.00 to 15.00
+Fetching current funding account status.
+Success.  Available balance: 0.330014
+Available balance is less than requested purchase: 15.00
+Initiating deposit of 15.00 USD
+Waiting for deposit to be available in account.
+Checking available balance: 0.33
+Checking available balance: 15.33
+Initiating purchase of 15.00 USD worth of BTC
+Purchase successful!
+```
+
 ## Lambda Usage
 
 This repo also contains an example deployment using [AWS Lambda](https://aws.amazon.com/lambda/) executed on a schedule to provide a means to "dollar cost average" with scheduled buys regardless of price. This is handled with [terraform](https://www.terraform.io/). See [the terraform directory](terraform) for details.
