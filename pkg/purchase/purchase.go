@@ -41,12 +41,12 @@ func (p *purchaser) initiatePurchase() error {
 
 	// Check if current balance is sufficient
 	if initialBalance < p.cfg.Amount {
-		fmt.Printf("Available balance is less than requested purchase: %f\n", p.cfg.Amount)
+		fmt.Printf("Available balance is less than requested purchase: %.2f\n", p.cfg.Amount)
 		if !p.cfg.AutoDeposit {
 			return errors.New("insufficient funds for purchase")
 		}
 		// initiate and wait for deposit
-		fmt.Printf("Initiating deposit of %f %s\n", p.cfg.Amount, p.cfg.Currency)
+		fmt.Printf("Initiating deposit of %.2f %s\n", p.cfg.Amount, p.cfg.Currency)
 		if err = p.deposit(p.cfg.Currency, p.cfg.Amount, p.cfg.UseCoinbase); err != nil {
 			return err
 		}
@@ -66,7 +66,7 @@ func (p *purchaser) initiatePurchase() error {
 					continue
 				}
 
-				fmt.Printf("Checking available balance: %f\n", balance)
+				fmt.Printf("Checking available balance: %.2f\n", balance)
 
 				if balance >= cfg.Amount {
 					ch <- 1
@@ -85,7 +85,7 @@ func (p *purchaser) initiatePurchase() error {
 	}
 
 	// Make purchase
-	fmt.Printf("Initiating purchase of %f %s worth of %s\n", p.cfg.Amount, p.cfg.Currency, p.cfg.Product)
+	fmt.Printf("Initiating purchase of %.2f %s worth of %s\n", p.cfg.Amount, p.cfg.Currency, p.cfg.Product)
 	return p.purchase(p.cfg.Product, p.cfg.Currency, p.cfg.Amount)
 }
 
