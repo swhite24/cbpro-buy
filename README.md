@@ -19,6 +19,7 @@ go get github.com/swhite24/cbpro-buy/cmd/cbpro-buy
 - Purchase any product on Coinbase Pro in any currency pair (that's available to your locale / account).
 - Automatically deposit funds to conduct the purchase if your USD / other currency account is unable to fulfill.
 - Automatically wait for deposit to clear before attempting to issue a market buy.
+- Allow for weighing purchases if current price falls below average price over configured amount of time.
 
 ## Usage
 
@@ -42,6 +43,29 @@ Flags:
       --sandbox                    Whether to use coinbase pro sandbox environment (will require different api key
       --secret string              Coinbase Pro API key secret
       --use-basis                  Whether to adjust purchase amount if current price is below average cost over time window
+```
+
+## Example
+
+```sh
+$ export CBPRO_BUY_SECRET="..."
+$ export CBPRO_BUY_KEY="..."
+$ export CBPRO_BUY_PASSPHRASE="..."
+$ cbpro-buy --amount 10 --autodeposit --use-basis
+Use basis configured. Getting average purchase price over last 30 days.
+Average purchase price: 56580.94
+Current book price: 54953.52
+Current price less than average price.
+Adjusting buy amount from 10.00 to 15.00
+Fetching current funding account status.
+Success.  Available balance: 0.330014
+Available balance is less than requested purchase: 15.00
+Initiating deposit of 15.00 USD
+Waiting for deposit to be available in account.
+Checking available balance: 0.33
+Checking available balance: 15.33
+Initiating purchase of 15.00 USD worth of BTC
+Purchase successful!
 ```
 
 ## Lambda Usage
