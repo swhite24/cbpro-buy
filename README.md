@@ -19,6 +19,7 @@ go get github.com/swhite24/cbpro-buy/cmd/cbpro-buy
 - Purchase any product on Coinbase Pro in any currency pair (that's available to your locale / account).
 - Automatically deposit funds to conduct the purchase if your USD / other currency account is unable to fulfill.
 - Automatically wait for deposit to clear before attempting to issue a market buy.
+- Allow for weighing purchases if current price falls below average price over configured amount of time.
 
 ## Usage
 
