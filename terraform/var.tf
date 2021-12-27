@@ -8,7 +8,7 @@ variable "auto_deposit" { default = 1 }
 variable "amount" { default = 50 }
 variable "currency" { default = "USD" }
 variable "product" { default = "BTC" }
-variable "use_basis" { default = true }
+variable "use_basis" { default = false }
 variable "basis_window_start" { default = 90 }
 variable "cbpro_key" {
   type      = string
