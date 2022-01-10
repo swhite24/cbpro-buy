@@ -12,6 +12,7 @@ env:
   TF_VAR_cbpro_passphrase: ${{ secrets.CBPRO_BUY_PASSPHRASE }}
   TF_VAR_cbpro_secret: ${{ secrets.CBPRO_BUY_SECRET }}
   TF_VAR_amount: ${{ secrets.PURCHASE_AMOUNT }}
+  TF_VAR_use_basis: ${{ secrets.USE_BASIS }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
